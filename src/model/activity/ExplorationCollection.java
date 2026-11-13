@@ -6,7 +6,8 @@ public class ExplorationCollection implements Activity {
 
     }
 
-    private void collect() {
+    @Override
+    public void collect() {
 
     }
 }

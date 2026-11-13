@@ -6,7 +6,8 @@ public class GoUpTransmission implements Activity {
 
     }
 
-    private void transmission() {
+    @Override
+    public void transmission() {
 
     }
 }
