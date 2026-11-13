@@ -9,5 +9,6 @@ public class ExplorationCollection implements Activity {
     @Override
     public void collect() {
 
+
     }
 }
