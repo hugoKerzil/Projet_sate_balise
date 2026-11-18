@@ -8,4 +8,19 @@ import lombok.Setter;
 public class Turbidity  implements Data{
 
     private int value;
+
+    @Override
+    public String getType() {
+        return "";
+    }
+
+    @Override
+    public String getDetails() {
+        return "";
+    }
+
+    @Override
+    public Object getValue() {
+        return "";
+    }
 }
