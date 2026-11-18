@@ -1,38 +1,37 @@
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import view.SatelliteView;
-import view.SimulationView;
-import view.TrackerView;
+import model.entity.Satellite;
+import model.entity.Tracker;
+import view.GlobalView;
 
 public class Main {
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Satellite & Balises");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            SimulationView view = new SimulationView(1000, 680);
+            GlobalView globalView = new GlobalView(1000, 680);
 
-            // Satellites dans la partie supérieure (mouvement gauche -> droite uniquement)
-            view.addSatellite(new SatelliteView(280, 45, 2));
-            view.addSatellite(new SatelliteView(430, 95, 3));
-            view.addSatellite(new SatelliteView(550, 145, 2));
-            view.addSatellite(new SatelliteView(390, 205, 1));
-            view.addSatellite(new SatelliteView(760, 50, 2));
+            // Satellites dans la SkyView
+            globalView.addSatellite(new Satellite("SAT-1", 280, 45, 2));
+            globalView.addSatellite(new Satellite("SAT-2", 430, 95, 3));
+            globalView.addSatellite(new Satellite("SAT-3", 550, 145, 2));
+            globalView.addSatellite(new Satellite("SAT-4", 390, 205, 1));
+            globalView.addSatellite(new Satellite("SAT-5", 760, 50, 2));
 
-            // Trackers dans la partie bleue (mouvement libre toutes directions, confiné dans l'océan)
-            view.addTracker(new TrackerView(270, 380, 2, -1));
-            view.addTracker(new TrackerView(100, 480, -2, 1));
-            view.addTracker(new TrackerView(195, 535, 1, -2));
-            view.addTracker(new TrackerView(465, 490, -1, -2));
-            view.addTracker(new TrackerView(125, 600, 2, -1));
+            // Trackers dans l'OceanView (y = 0 correspond à la surface de l'eau)
+            globalView.addTracker(new Tracker("TRK-1", 270, 15));
+            globalView.addTracker(new Tracker("TRK-2", 100, 100));
+            globalView.addTracker(new Tracker("TRK-3", 195, 160));
+            globalView.addTracker(new Tracker("TRK-4", 465, 110));
+            globalView.addTracker(new Tracker("TRK-5", 125, 210));
 
-            frame.setContentPane(view);
+            frame.setContentPane(globalView);
             frame.pack();
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
 
-            view.start();
+            globalView.start();
         });
     }
 }
