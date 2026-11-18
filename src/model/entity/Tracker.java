@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class Tracker {
+public class Tracker implements SimulableEntity{
     private String id;
     private int x, y;
     private List<Data> data;
