@@ -223,19 +223,27 @@ public class SimulationView extends NiSpace {
     }
 
     private void drawTransmissionLinks(Graphics2D g2, int waterlineY) {
-        // Si une balise remonte en surface sous un satellite, affiche le faisceau de transmission
         for (TrackerView tracker : trackers) {
             if (tracker.getY() <= waterlineY + 14) {
                 int tx = tracker.getX() + tracker.getWidth() / 2;
                 int ty = tracker.getY() + 6;
+                SatelliteView targetSatellite = null;
+
                 for (SatelliteView sat : satellites) {
-                    int sx = sat.getX() + sat.getWidth() / 2;
-                    int sy = sat.getY() + sat.getHeight() / 2;
-                    if (Math.abs(tx - sx) < 130) {
-                        g2.setColor(new Color(110, 245, 255, 140));
-                        g2.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f, new float[]{5f, 5f}, 0f));
-                        g2.drawLine(tx, ty, sx, sy);
+                    int satLeft = sat.getX();
+                    int satRight = sat.getX() + sat.getWidth();
+                    if (tx >= satLeft && tx <= satRight) {
+                        targetSatellite = sat;
+                        break;
                     }
+                }
+                if (targetSatellite != null) {
+                    int sx = targetSatellite.getX() + targetSatellite.getWidth() / 2;
+                    int sy = targetSatellite.getY() + targetSatellite.getHeight() / 2;
+
+                    g2.setColor(new Color(110, 245, 255, 180));
+                    g2.setStroke(new BasicStroke(1.8f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f, new float[]{5f, 5f}, 0f));
+                    g2.drawLine(tx, ty, sx, sy);
                 }
             }
         }
