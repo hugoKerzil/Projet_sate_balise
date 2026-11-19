@@ -32,15 +32,38 @@ public class OceanView extends NiSpace {
         return trackerViews;
     }
 
+    /**
+     * Retourne la coordonnée Y correspondant à la profondeur limite de -100 m :
+     * segment de (0, h / 4) à (w, h / 4).
+     */
+    public int getMaxCollectionDepthY() {
+        return getHeight() / 4;
+    }
+
     public void update() {
         int w = getWidth();
         int h = getHeight();
+        int maxDepthY = getMaxCollectionDepthY();
+
         for (TrackerView tv : trackerViews) {
             tv.update(w, h);
+
+            // Si le tracker n'a pas encore fini sa collecte (ex: < 3 données),
+            // il ne doit pas descendre sous la ligne des -100 m (y > maxDepthY)
+            Tracker modelTracker = tv.getTracker(); // à adapter selon le getter de TrackerView
+            if (modelTracker != null && !modelTracker.hasCollectedEnoughData()) {
+                int clampedX = Math.max(0, Math.min(tv.getX(), Math.max(0, w - tv.getWidth())));
+                int clampedY = Math.min(tv.getY(), maxDepthY);
+                tv.setLocation(clampedX, clampedY);
+                modelTracker.setPosition(clampedX, clampedY); // optionnel selon ton modèle
+            }
         }
+
         for (int[] b : bubbles) {
             b[1] -= 1;
-            if (b[1] < 8) b[1] = Math.max(20, h - 10);
+            if (b[1] < 8) {
+                b[1] = Math.max(20, h - 10);
+            }
         }
     }
 
@@ -52,6 +75,7 @@ public class OceanView extends NiSpace {
 
         int w = getWidth();
         int h = getHeight();
+        int limitY = h / 4;
 
         // Dégradé bleu surface -> bleu abysse
         g2.setPaint(new GradientPaint(0, 0, new Color(14, 116, 194), 0, h, new Color(4, 28, 68)));
@@ -74,8 +98,16 @@ public class OceanView extends NiSpace {
         g2.setFont(new Font("SansSerif", Font.PLAIN, 11));
         for (int i = 1; i <= 3; i++) {
             int y = (h * i) / 4;
-            g2.setColor(new Color(180, 225, 255, 35));
-            g2.drawLine(0, y, w, y);
+            if (i == 1) {
+                // Ligne limite de collecte à -100 m : de (0, h/4) à (w, h/4)
+                g2.setColor(new Color(120, 240, 255, 110));
+                g2.setStroke(new BasicStroke(1.4f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, new float[]{6f, 4f}, 0f));
+                g2.drawLine(0, limitY, w, limitY);
+                g2.setStroke(new BasicStroke(1f));
+            } else {
+                g2.setColor(new Color(180, 225, 255, 35));
+                g2.drawLine(0, y, w, y);
+            }
             g2.setColor(new Color(200, 235, 255, 120));
             g2.drawString("-" + (i * 100) + " m", w - 52, y - 4);
         }

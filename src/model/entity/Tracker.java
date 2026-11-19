@@ -3,6 +3,7 @@ package model.entity;
 import lombok.Getter;
 import lombok.Setter;
 import model.activity.Activity;
+import model.activity.ExplorationCollection;
 import model.data.Data;
 
 import java.util.ArrayList;
@@ -12,12 +13,21 @@ import java.util.Random;
 @Getter
 @Setter
 public class Tracker implements SimulableEntity {
+    public static final int DATA_THRESHOLD = 3;
+
     private String id;
     private int x, y;
     private int vx = 2, vy = -1;
     private List<Data> data = new ArrayList<>();
     private Activity activity;
     private final Random random = new Random();
+
+    public Tracker(String id, int x, int y) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.activity = new ExplorationCollection();
+    }
 
     public String getId() {
         return id;
@@ -27,20 +37,20 @@ public class Tracker implements SimulableEntity {
         this.id = id;
     }
 
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
     public int getX() {
         return x;
     }
 
     public void setX(int x) {
         this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public int getVx() {
@@ -79,25 +89,20 @@ public class Tracker implements SimulableEntity {
         return random;
     }
 
-    public Tracker(String id, int x, int y) {
-        this.id = id;
+    public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
     @Override
     public void move(int maxX, int maxY) {
-        // Variation aléatoire pour bouger dans toutes les directions
         if (random.nextInt(30) == 0) {
             vx = random.nextInt(5) - 2; // entre -2 et 2
             vy = random.nextInt(5) - 2;
             if (vx == 0 && vy == 0) vx = 1;
         }
-
         x += vx;
         y += vy;
-
-        // Confinement strict dans la vue océan (0..maxX, 0..maxY)
         if (x <= 0) {
             x = 0;
             vx = Math.abs(vx);
@@ -113,5 +118,13 @@ public class Tracker implements SimulableEntity {
             y = maxY;
             vy = -Math.abs(vy);
         }
+    }
+
+    public boolean hasCollectedEnoughData() {
+        return data.size() >= DATA_THRESHOLD;
+    }
+
+    public void clearData() {
+        data.clear();
     }
 }
