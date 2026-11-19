@@ -1,11 +1,6 @@
 package view;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -18,7 +13,7 @@ public class SkyView extends NiSpace {
     private final List<int[]> stars = new ArrayList<>();
 
     public SkyView() {
-        super();
+        super("SkyView", new Dimension());
         setLayout(null);
         Random rand = new Random(42);
         for (int i = 0; i < 35; i++) {

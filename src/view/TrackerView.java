@@ -9,6 +9,9 @@ import nicellipse.component.NiSpace;
 
 @Getter
 public class TrackerView extends NiSpace {
+    public Tracker getTracker() {
+        return tracker;
+    }
 
     private final Tracker tracker;
 

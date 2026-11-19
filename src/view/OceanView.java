@@ -1,12 +1,6 @@
 package view;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +14,7 @@ public class OceanView extends NiSpace {
     private final List<int[]> bubbles = new ArrayList<>();
 
     public OceanView() {
-        super();
+        super("OceanView", new Dimension());
         setLayout(null);
         Random rand = new Random(12);
         for (int i = 0; i < 22; i++) {

@@ -22,7 +22,7 @@ public class GlobalView extends NiSpace {
     private final Timer timer;
 
     public GlobalView(int width, int height) {
-        super();
+        super("Global", new Dimension(width, height));
         setLayout(null);
         setPreferredSize(new Dimension(width, height));
         setSize(width, height);
